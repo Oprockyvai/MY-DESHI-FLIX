@@ -2,114 +2,215 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Category Results - MyDesiFlix</title>
-  <meta name="description" content="Watch free Desi, Teen, MILF, Anal, Russian, BBC, Hardcore, Stepmom, Stepdad, Stepsis, Asian, Petite, Huge Cock, Shemale, Group Sex, Lesbian, and Couple videos, HD adult streaming on MyDesiFlix, No ads, no redirects." />
+  <<meta name="description" content="Watch free Desi, Teen, MILF, Anal, Russian, BBC, Hardcore, Stepmom, Stepdad, Stepsis, Asian, Petite, Huge Cock, Shemale, Group Sex, Lesbian, and Couple videos, HD adult streaming on MyDesiFlix, No ads, no redirects." />
 <meta name="keywords" content="Watch free Desi, Teen, MILF, Anal, Russian, BBC, Hardcore, Stepmom, Stepdad, Stepsis, Asian, Petite, Huge Cock, Shemale, Group Sex, Lesbian, and Couple videos" />
-  <meta name="author" content="MyDesiFlix Team">
+<meta name="robots" content="index, follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-    body { background: #111; color: #eee; font-family: sans-serif; margin: 0; }
-    .navbar { background: #222; display: flex; justify-content: space-between; padding: 10px 20px; align-items: center; }
-    .logo-area { display: flex; align-items: center; gap: 10px; }
-    .logo-area img { height: 40px; border-radius: 5px; }
-    .logo-area span { font-size: 24px; color: #ff4d4d; font-weight: bold; }
-    .menu-btn { width: 30px; height: 22px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
-    .menu-btn span { display: block; height: 4px; background: white; border-radius: 2px; }
-
-    .dropdown { display: none; background: #333; position: absolute; top: 60px; left: 0; width: 100%; z-index: 99; }
-    .dropdown a { display: block; padding: 10px 20px; color: #fff; text-decoration: none; border-bottom: 1px solid #444; }
-    .dropdown a:hover { background: #444; }
-
-    .search-form { padding: 20px; background: #111; border-top: 1px solid #333; border-bottom: 1px solid #333; }
-    .search-form form { display: flex; gap: 10px; }
-    .search-form input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      outline: none;
-      font-size: 16px;
+    body { background:#111; color:#eee; font-family:sans-serif; margin:0; }
+    .navbar { background:#222; display:flex; justify-content:space-between; padding:10px 20px; align-items:center; }
+    .logo-area { display:flex; align-items:center; gap:10px; }
+    .logo-area img { height:40px; border-radius:5px; }
+    .logo-area span { font-size:24px; color:#ff4d4d; font-weight:bold; }
+    .menu-btn { font-size:30px; color:#fff; cursor:pointer; }
+    .dropdown { display:none; background:#333; position:absolute; top:60px; left:0; width:100%; z-index:99; }
+    .dropdown a { display:block; padding:10px 20px; color:#fff; text-decoration:none; border-bottom:1px solid #444; }
+    .dropdown a:hover { background:#444; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; }
+    .video-card { background:#222; border-radius:8px; overflow:hidden; }
+    .video-card img { width:100%; height:160px; object-fit:cover; }
+    .video-card a { display:block; color:#ff8080; text-decoration:none; padding:10px; font-weight:bold; }
+    .pagination { text-align:center; padding:20px; }
+    .pagination a {
+      color:#ff4d4d; padding:10px 15px; text-decoration:none;
+      border:1px solid #ff4d4d; margin:5px; border-radius:5px;
     }
-    .search-form button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      background: #ff4d4d;
-      color: white;
-      font-weight: bold;
+    .pagination a:hover {
+      background:#ff4d4d; color:#fff;
+    }
+    .pagination .current {
+      background:#ff4d4d; color:#fff;
+      pointer-events: none;
+    }
+    .menu-btn {
+      width: 30px;
+      height: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       cursor: pointer;
     }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
-    .video-card { background: #222; border-radius: 8px; overflow: hidden; }
-    .video-card img { width: 100%; height: 160px; object-fit: cover; }
-    .video-card a { display: block; color: #ff8080; text-decoration: none; padding: 10px; font-weight: bold; }
-
-    .pagination { text-align: center; padding: 20px; }
-    .pagination a {
-      color: #ff4d4d;
-      padding: 8px 12px;
-      text-decoration: none;
-      margin: 5px;
-      border: 1px solid #ff4d4d;
-      border-radius: 5px;
+    .menu-btn span {
+      display: block;
+      height: 4px;
+      background: white;
+      border-radius: 2px;
     }
-    .pagination a.active, .pagination a:hover { background: #ff4d4d; color: #fff; }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <div class="navbar">
-    <div class="logo-area">
-      <img src="logo.png" alt="MyDesiFlix Logo" />
-      <span>MyDesiFlix</span>
-    </div>
-    <div class="menu-btn" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
-    </div>
+<!-- Navbar -->
+<div class="navbar">
+  <div class="logo-area">
+    <img src="logo.png" alt="MyDesiFlix Logo">
+    <span>MyDesiFlix</span>
   </div>
-
-  <!-- Dropdown Menu -->
-  <div id="dropdown" class="dropdown">
-    <a href="index.html">HOME</a>
-    <a href="category.html?cat=amateur">AMATEUR</a>
-    <a href="category.html?cat=asian">ASIAN</a>
-    <a href="category.html?cat=bbc">BIG BLACK COCK</a>
-    <a href="category.html?cat=dp">DUBBLE PENETRATION</a>
-    <a href="category.html?cat=family">FAMILY</a>
-    <a href="category.html?cat=group">GROUP</a>
-    <a href="category.html?cat=hardcore">HARDCORE</a>
-    <a href="category.html?cat=indian">INDIAN</a>
-    <a href="category.html?cat=kitchen">KITCHEN</a>
-    <a href="category.html?cat=latina">LATINA</a>
-    <a href="category.html?cat=lesbian">LESBIAN</a>
-    <a href="category.html?cat=milf">MILF</a>
-    <a href="category.html?cat=new">NEW</a>
-    <a href="category.html?cat=office">OFFICE</a>
-    <a href="category.html?cat=russian">RUSSIAN</a>
-    <a href="category.html?cat=shemale">SHEMALE</a>
-    <a href="category.html?cat=squirting">SQUIRTING</a>
-    <a href="category.html?cat=stepmom">STEP MOM</a>
-    <a href="category.html?cat=stepdad">STEP DAD</a>
-    <a href="category.html?cat=stepsis">STEP SIS</a>
-    <a href="category.html?cat=stepbrother">STEP BROTHER</a>
-    <a href="category.html?cat=teen">TEEN</a>
-    <a href="category.html?cat=workout">WORKOUT</a>
-    <a href="category.html?cat=xxx">XXX VIDEOS</a>
+  <div class="menu-btn" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
+</div>
 
-  <!-- Search Form -->
-  <div class="search-form">
-    <form action="search.html" method="get">
-      <input type="text" name="q" placeholder="Search videos..." required value="">
-      <button type="submit">Search</button>
-    </form>
+<!-- Search Bar -->
+<div class="search-bar" style="padding: 10px 20px; background: #111; border-top: 1px solid #333; border-bottom: 1px solid #333;">
+  <form action="search.html" method="get" style="display: flex; gap: 5px;">
+    <input type="text" name="q" placeholder="Search videos..." style="flex: 1; padding: 10px; border-radius: 5px; border: none; outline: none;" required>
+    <button type="submit" style="padding: 10px 15px; border: none; border-radius: 5px; background: #ff4d4d; color: white;">Search</button>
+  </form>
+</div>
+
+<!-- Dropdown Menu -->
+<div id="dropdown" class="dropdown">
+  <a href="index.html">HOME</a>
+  <a href="category.html?cat=amateur">AMATEUR</a>
+  <a href="category.html?cat=asian">ASIAN</a>
+  <a href="category.html?cat=bbc">BIG BLACK COCK</a>
+  <a href="category.html?cat=dp">DUBBLE PENETRATION</a>
+  <a href="category.html?cat=family">FAMILY</a>
+  <a href="category.html?cat=gangbang">GANGBANG</a>
+  <a href="category.html?cat=hardcore">HARDCORE</a>
+  <a href="category.html?cat=indian">INDIAN</a>
+  <a href="category.html?cat=kitchen">KITCHEN</a>
+  <a href="category.html?cat=latina">LATINA</a>
+  <a href="category.html?cat=lesbian">LESBIAN</a>
+  <a href="category.html?cat=milf">MILF</a>
+  <a href="category.html?cat=new">NEW</a>
+  <a href="category.html?cat=office">OFFICE</a>
+  <a href="category.html?cat=petite">PETITE</a>
+  <a href="category.html?cat=russian">RUSSIAN</a>
+  <a href="category.html?cat=shemale">SHEMALE</a>
+  <a href="category.html?cat=squirting">SQUIRTING</a>
+  <a href="category.html?cat=stepmom">STEP MOM</a>
+  <a href="category.html?cat=stepdad">STEP DAD</a>
+  <a href="category.html?cat=stepsis">STEP SIS</a>
+  <a href="category.html?cat=stepbrother">STEP BROTHER</a>
+  <a href="category.html?cat=teen">TEEN</a>
+  <a href="category.html?cat=workout">WORKOUT</a>
+  <a href="category.html?cat=xxx">XXX VIDEOS</a>
+</div>
+
+<h2 id="categoryTitle" style="padding:20px;">Category: Loading...</h2>
+<div class="grid" id="videosGrid"></div>
+<div class="pagination" id="pagination"></div><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <<meta name="description" content="Watch free Desi, Teen, MILF, Anal, Russian, BBC, Hardcore, Stepmom, Stepdad, Stepsis, Asian, Petite, Huge Cock, Shemale, Group Sex, Lesbian, and Couple videos, HD adult streaming on MyDesiFlix, No ads, no redirects." />
+<meta name="keywords" content="Watch free Desi, Teen, MILF, Anal, Russian, BBC, Hardcore, Stepmom, Stepdad, Stepsis, Asian, Petite, Huge Cock, Shemale, Group Sex, Lesbian, and Couple videos" />
+<meta name="robots" content="index, follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body { background:#111; color:#eee; font-family:sans-serif; margin:0; }
+    .navbar { background:#222; display:flex; justify-content:space-between; padding:10px 20px; align-items:center; }
+    .logo-area { display:flex; align-items:center; gap:10px; }
+    .logo-area img { height:40px; border-radius:5px; }
+    .logo-area span { font-size:24px; color:#ff4d4d; font-weight:bold; }
+    .menu-btn { font-size:30px; color:#fff; cursor:pointer; }
+    .dropdown { display:none; background:#333; position:absolute; top:60px; left:0; width:100%; z-index:99; }
+    .dropdown a { display:block; padding:10px 20px; color:#fff; text-decoration:none; border-bottom:1px solid #444; }
+    .dropdown a:hover { background:#444; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; }
+    .video-card { background:#222; border-radius:8px; overflow:hidden; }
+    .video-card img { width:100%; height:160px; object-fit:cover; }
+    .video-card a { display:block; color:#ff8080; text-decoration:none; padding:10px; font-weight:bold; }
+    .pagination { text-align:center; padding:20px; }
+    .pagination a {
+      color:#ff4d4d; padding:10px 15px; text-decoration:none;
+      border:1px solid #ff4d4d; margin:5px; border-radius:5px;
+    }
+    .pagination a:hover {
+      background:#ff4d4d; color:#fff;
+    }
+    .pagination .current {
+      background:#ff4d4d; color:#fff;
+      pointer-events: none;
+    }
+    .menu-btn {
+      width: 30px;
+      height: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .menu-btn span {
+      display: block;
+      height: 4px;
+      background: white;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="logo-area">
+    <img src="logo.png" alt="MyDesiFlix Logo">
+    <span>MyDesiFlix</span>
   </div>
+  <div class="menu-btn" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
 
-  <!-- Heading + Results -->
-  <h2 id="searchHeading" style="padding: 20px;">Search Results</h2>
-  <div class="grid" id="resultsGrid"></div>
-  <div class="pagination" id="pagination"></div>
+<!-- Search Bar -->
+<div class="search-bar" style="padding: 10px 20px; background: #111; border-top: 1px solid #333; border-bottom: 1px solid #333;">
+  <form action="search.html" method="get" style="display: flex; gap: 5px;">
+    <input type="text" name="q" placeholder="Search videos..." style="flex: 1; padding: 10px; border-radius: 5px; border: none; outline: none;" required>
+    <button type="submit" style="padding: 10px 15px; border: none; border-radius: 5px; background: #ff4d4d; color: white;">Search</button>
+  </form>
+</div>
+
+<!-- Dropdown Menu -->
+<div id="dropdown" class="dropdown">
+  <a href="index.html">HOME</a>
+  <a href="category.html?cat=amateur">AMATEUR</a>
+  <a href="category.html?cat=asian">ASIAN</a>
+  <a href="category.html?cat=bbc">BIG BLACK COCK</a>
+  <a href="category.html?cat=dp">DUBBLE PENETRATION</a>
+  <a href="category.html?cat=family">FAMILY</a>
+  <a href="category.html?cat=gangbang">GANGBANG</a>
+  <a href="category.html?cat=hardcore">HARDCORE</a>
+  <a href="category.html?cat=indian">INDIAN</a>
+  <a href="category.html?cat=kitchen">KITCHEN</a>
+  <a href="category.html?cat=latina">LATINA</a>
+  <a href="category.html?cat=lesbian">LESBIAN</a>
+  <a href="category.html?cat=milf">MILF</a>
+  <a href="category.html?cat=new">NEW</a>
+  <a href="category.html?cat=office">OFFICE</a>
+  <a href="category.html?cat=petite">PETITE</a>
+  <a href="category.html?cat=russian">RUSSIAN</a>
+  <a href="category.html?cat=shemale">SHEMALE</a>
+  <a href="category.html?cat=squirting">SQUIRTING</a>
+  <a href="category.html?cat=stepmom">STEP MOM</a>
+  <a href="category.html?cat=stepdad">STEP DAD</a>
+  <a href="category.html?cat=stepsis">STEP SIS</a>
+  <a href="category.html?cat=stepbrother">STEP BROTHER</a>
+  <a href="category.html?cat=teen">TEEN</a>
+  <a href="category.html?cat=workout">WORKOUT</a>
+  <a href="category.html?cat=xxx">XXX VIDEOS</a>
+</div>
+
+<h2 id="categoryTitle" style="padding:20px;">Category: Loading...</h2>
+<div class="grid" id="videosGrid"></div>
+<div class="pagination" id="pagination"></div>
 
   <!-- Scripts -->
   <script src="search-data.js"></script>
