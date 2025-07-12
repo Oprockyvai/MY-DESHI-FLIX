@@ -1,4 +1,7 @@
 User-agent: *
-Disallow:
+Disallow: /private/
+Disallow: /admin/
+Allow: /
 
-Sitemap: https://oprockyvai.github.io/MY-DESHI-FLIX/sitemap.xml
+Sitemap: https://mydeshiflix.pro/sitemap.xml
+Content-rating: RTA-5042-1996-1400-1577-RTA
