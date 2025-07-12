@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /private/
+Disallow: /admin/
+Allow: /
+
+Sitemap: https://mydeshiflix.pro/sitemap.xml
+Content-rating: RTA-5042-1996-1400-1577-RTA

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MyDesiFlix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Watch free Desi, Teen, MILF, Anal, Russian, BBC, Hardcore, Stepmom, Stepdad, Stepsis, Asian, Petite, Huge Cock, Shemale, Group Sex, Lesbian, and Couple videos, HD adult streaming on MyDesiFlix, No ads, no redirects." />
+  <meta name="keywords" content="Watch free Desi, Teen, MILF, Anal, Russian, BBC, Hardcore, Stepmom, Stepdad, Stepsis, Asian, Petite, Huge Cock, Shemale, Group Sex, Lesbian, and Couple videos" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="MyDesiFlix Team">
+
+  <style>
+    body { background:#111; color:#eee; font-family:sans-serif; margin:0; }
+    .navbar { background:#222; display:flex; justify-content:space-between; padding:10px 20px; align-items:center; }
+    .logo-area { display:flex; align-items:center; gap:10px; }
+    .logo-area img { height:40px; border-radius:5px; }
+    .logo-area span { font-size:24px; color:#ff4d4d; font-weight:bold; }
+    .menu-btn { width: 30px; height: 22px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
+    .menu-btn span { display: block; height: 4px; background: white; border-radius: 2px; }
+    .dropdown { display:none; background:#333; position:absolute; top:60px; left:0; width:100%; z-index:99; }
+    .dropdown a { display:block; padding:10px 20px; color:#fff; text-decoration:none; border-bottom:1px solid #444; }
+    .dropdown a:hover { background:#444; }
+
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; }
+    .video-card { background:#222; border-radius:8px; overflow:hidden; }
+    .video-card img { width:100%; height:160px; object-fit:cover; }
+    .video-card a { display:block; color:#ff8080; text-decoration:none; padding:10px; font-weight:bold; }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+    }
+    .pagination a {
+      padding: 8px 14px;
+      border-radius: 6px;
+      background-color: #222;
+      color: #ff4d4d;
+      text-decoration: none;
+      border: 1px solid #ff4d4d;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .pagination a:hover {
+      background-color: #ff4d4d;
+      color: white;
+    }
+    .pagination a.active {
+      background-color: #ff4d4d;
+      color: white;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="logo-area">
+    <img src="logo.png" alt="MyDesiFlix Logo">
+    <span>MyDesiFlix</span>
+  </div>
+  <div class="menu-btn" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<!-- Search Bar -->
+<div class="search-bar" style="padding: 10px 20px; background: #111; border-top: 1px solid #333; border-bottom: 1px solid #333;">
+  <form action="search.html" method="get" style="display: flex; gap: 5px;">
+    <input type="text" name="q" placeholder="Search videos..." style="flex: 1; padding: 10px; border-radius: 5px; border: none; outline: none;" required>
+    <button type="submit" style="padding: 10px 15px; border: none; border-radius: 5px; background: #ff4d4d; color: white;">Search</button>
+  </form>
+</div>
+
+<!-- Dropdown -->
+<div id="dropdown" class="dropdown">
+  <a href="index.html">HOME</a>
+  <a href="category.html?cat=amateur">AMATEUR</a>
+  <a href="category.html?cat=asian">ASIAN</a>
+  <a href="category.html?cat=bbc">BIG BLACK COCK</a>
+  <a href="category.html?cat=dp">DOUBLE PENETRATION</a>
+  <a href="category.html?cat=family">FAMILY</a>
+  <a href="category.html?cat=gangbang">GANGBANG</a>
+  <a href="category.html?cat=hardcore">HARDCORE</a>
+  <a href="category.html?cat=indian">INDIAN</a>
+  <a href="category.html?cat=kitchen">KITCHEN</a>
+  <a href="category.html?cat=latina">LATINA</a>
+  <a href="category.html?cat=lesbian">LESBIAN</a>
+  <a href="category.html?cat=milf">MILF</a>
+  <a href="category.html?cat=new">NEW</a>
+  <a href="category.html?cat=office">OFFICE</a>
+  <a href="category.html?cat=petite">PETITE</a>
+  <a href="category.html?cat=russian">RUSSIAN</a>
+  <a href="category.html?cat=shemale">SHEMALE</a>
+  <a href="category.html?cat=squirting">SQUIRTING</a>
+  <a href="category.html?cat=stepmom">STEP MOM</a>
+  <a href="category.html?cat=stepdad">STEP DAD</a>
+  <a href="category.html?cat=stepsis">STEP SIS</a>
+  <a href="category.html?cat=stepbrother">STEP BROTHER</a>
+  <a href="category.html?cat=teen">TEEN</a>
+  <a href="category.html?cat=workout">WORKOUT</a>
+  <a href="category.html?cat=xxx">XXX VIDEOS</a>
+</div>
+
+<h2 style="padding: 20px;">Latest Videos</h2>
+<div class="grid" id="videoGrid"></div>
+<div class="pagination" id="pagination"></div>
+
+<script src="search-data.js"></script>
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("dropdown");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+  }
+
+  const videosPerPage = 10;
+  const urlParams = new URLSearchParams(window.location.search);
+  let currentPage = parseInt(urlParams.get('page')) || 1;
+
+  // Clone and shuffle videos randomly
+  const shuffledVideos = [...videoList].sort(() => Math.random() - 0.5);
+  const totalPages = Math.ceil(shuffledVideos.length / videosPerPage);
+
+  function renderVideos() {
+    const grid = document.getElementById("videoGrid");
+    grid.innerHTML = "";
+    const start = (currentPage - 1) * videosPerPage;
+    const end = start + videosPerPage;
+    const videos = shuffledVideos.slice(start, end);
+
+    videos.forEach(video => {
+      const card = document.createElement("div");
+      card.className = "video-card";
+      card.innerHTML = `
+        <a href="video.html?id=${video.id}">
+          <img src="${video.thumbnail}" alt="${video.title}">
+          <span>${video.title}</span>
+        </a>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function renderPagination() {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    const addLink = (page, label = null, active = false) => {
+      const a = document.createElement("a");
+      a.href = `index.html?page=${page}`;
+      a.textContent = label || page;
+      if (active) a.classList.add("active");
+      pagination.appendChild(a);
+    };
+
+    if (currentPage > 1) {
+      addLink(currentPage - 1, "« Prev");
+    }
+
+    addLink(currentPage, currentPage, true);
+
+    if (currentPage < totalPages) {
+      addLink(currentPage + 1, "Next »");
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    renderVideos();
+    renderPagination();
+  });
+</script>
+</body>
+</html>
