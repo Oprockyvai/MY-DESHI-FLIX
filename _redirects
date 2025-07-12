@@ -1,3 +1,2 @@
-/video     /video.html     200
-/search    /search.html    200
-/category  /category.html  200
+/video         /video.html      200
+/video/*       /video.html      200
