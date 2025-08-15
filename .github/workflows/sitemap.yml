@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GH_PAT }}  # ✅ PAT ব্যবহার
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -27,12 +27,11 @@ jobs:
       - name: Run sitemap generator
         run: node generate-sitemap.js
 
-      - name: Commit and push sitemap if changed
+      - name: Commit and push sitemap
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add sitemap.xml
-          # চেক করবে sitemap.xml-এ সত্যিই কোনো পরিবর্তন হয়েছে কিনা
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update sitemap.xml"
             git push https://$GITHUB_ACTOR:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git HEAD:main
