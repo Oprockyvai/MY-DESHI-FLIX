@@ -1,4 +1,4 @@
-name: Generate Sitemap
+name: Auto Sitemap Generator
 
 on:
   push:
@@ -7,27 +7,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  generate-sitemap:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_PAT }}  # PAT (Personal Access Token) Secret
+          token: ${{ secrets.GH_PAT }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install dependencies (if any)
         run: npm install || echo "No dependencies"
 
-      - name: Run sitemap generator
-        run: node generate-sitemap.js
+      - name: Generate sitemap.xml
+        run: npm run generate-sitemap
 
-      - name: Commit and push sitemap if changed
+      - name: Commit & push sitemap.xml
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
