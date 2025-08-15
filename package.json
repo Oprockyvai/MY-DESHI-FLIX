@@ -1,11 +1,9 @@
 {
-  "name": "mydeshiflix",
+  "name": "sitemap-generator",
   "version": "1.0.0",
-  "description": "MyDeshiFlix video sitemap generator",
-  "main": "generate-sitemap.js",
+  "type": "module",
   "scripts": {
-    "generate-sitemap": "node generate-sitemap.js"
+    "generate": "node generate-sitemap.js"
   },
-  "author": "Md Yeasin Hossen Rakib",
-  "license": "MIT"
+  "dependencies": {}
 }
