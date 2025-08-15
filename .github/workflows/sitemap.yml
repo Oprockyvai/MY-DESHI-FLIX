@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GH_PAT }}  # PAT ব্যবহার
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
