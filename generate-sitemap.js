@@ -16,5 +16,5 @@ videoList.forEach(video => {
 
 sitemap += `</urlset>`;
 
-fs.writeFileSync('sitemap.xml', sitemap, 'utf8');
+fs.writeFileSync('sitemap.xml', 'utf8');
 console.log('✅ Sitemap generated successfully!');
