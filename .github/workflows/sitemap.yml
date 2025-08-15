@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_PAT }}  # ✅ PAT ব্যবহার
+          token: ${{ secrets.GH_PAT }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -27,7 +27,7 @@ jobs:
       - name: Run sitemap generator
         run: node generate-sitemap.js
 
-      - name: Commit and push sitemap
+      - name: Commit and push sitemap if changed
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
@@ -35,3 +35,6 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update sitemap.xml"
             git push https://Oprockyvai:${{ secrets.GH_PAT }}@github.com/Oprockyvai/MY-DESHI-FLIX.git HEAD:main
+          else
+            echo "No changes to commit"
+          fi
