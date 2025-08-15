@@ -6,6 +6,6 @@
   "scripts": {
     "generate-sitemap": "node generate-sitemap.js"
   },
-  "author": "Md Yeasin Hossen Rakib",
+  "author": "Oprockyvai",
   "license": "MIT"
 }
