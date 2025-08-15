@@ -3,8 +3,8 @@ name: Generate Sitemap
 on:
   push:
     branches:
-      - main      # main branch-এ push হলে run হবে
-  workflow_dispatch: # manual trigger option
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,15 +14,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        token: ${{ secrets.PERSONAL_GITHUB_TOKEN }} # Personal access token ব্যবহার
+        token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
 
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
-
-    - name: Skip dependencies
-      run: echo "No dependencies to install"
 
     - name: Run sitemap generator
       run: node generate-sitemap.js
