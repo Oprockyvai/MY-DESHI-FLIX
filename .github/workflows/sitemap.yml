@@ -1,41 +1,36 @@
-name: Auto Sitemap Generator
+name: Generate Sitemap
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:
+      - main   # আপনার প্রধান ব্রাঞ্চের নাম
 
 jobs:
-  generate-sitemap:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GH_PAT }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
 
-      - name: Install dependencies (if any)
-        run: npm install || echo "No dependencies"
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Generate sitemap.xml
-        run: npm run generate-sitemap
+      - name: Generate Sitemap
+        run: npm run generate
 
-     - name: Commit & push sitemap.xml
-  run: |
-    git config --global user.name "github-actions"
-    git config --global user.email "github-actions@github.com"
-    git add sitemap.xml
-    if ! git diff --cached --quiet; then
-      git commit -m "Auto-update sitemap.xml"
-      git pull --rebase https://Oprockyvai:${{ secrets.GH_PAT }}@github.com/Oprockyvai/MY-DESHI-FLIX.git main
-      git push https://Oprockyvai:${{ secrets.GH_PAT }}@github.com/Oprockyvai/MY-DESHI-FLIX.git HEAD:main
-    else
-      echo "No changes to commit"
-    fi
+      - name: Commit & Push Sitemap
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add sitemap.xml
+          # শুধু পরিবর্তন থাকলে commit হবে
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-update sitemap.xml"
+            git push
+          fi
