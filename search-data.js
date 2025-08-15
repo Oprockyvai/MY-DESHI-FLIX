@@ -249,3 +249,5 @@ id: "31",
     category: ["bbc", "teen", "petite", "gangbang", "hardcore", "blonde"]
   },
 ];
+
+module.exports = { videoList }; // ✅ export করা লাগবে
