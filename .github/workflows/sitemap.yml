@@ -23,7 +23,7 @@ jobs:
       run: npm install || echo "No dependencies"
 
     - name: Run sitemap generator
-      run: node generate-sitemap.js
+  run: node generate-sitemap.js
 
     - name: Commit and push sitemap
       run: |
