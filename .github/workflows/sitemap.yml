@@ -24,13 +24,15 @@ jobs:
       - name: Generate Sitemap
         run: npm run generate
 
-      - name: Commit & Push Sitemap
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add sitemap.xml
-          # শুধু পরিবর্তন থাকলে commit হবে
-          if ! git diff --cached --quiet; then
-            git commit -m "Auto-update sitemap.xml"
-            git push
-          fi
+      - name: Commit & push sitemap.xml
+  run: |
+    git config --global user.name "github-actions"
+    git config --global user.email "github-actions@github.com"
+    git add sitemap.xml
+    if ! git diff --cached --quiet; then
+      git commit -m "Auto-update sitemap.xml"
+      git pull --rebase https://Oprockyvai:${{ secrets.GH_PAT }}@github.com/Oprockyvai/MY-DESHI-FLIX.git main
+      git push https://Oprockyvai:${{ secrets.GH_PAT }}@github.com/Oprockyvai/MY-DESHI-FLIX.git HEAD:main
+    else
+      echo "No changes to commit"
+    fi
