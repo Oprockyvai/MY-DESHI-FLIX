@@ -25,9 +25,9 @@ categories.forEach(cat => {
 
 // Videos
 videoList.forEach(video => {
-  let videoUrl = video.link.startsWith('http') 
-    ? video.link 
-    : `${domain}${video.link}`;
+  let videoUrl = video.embed.startsWith('http') 
+    ? video.embed 
+    : `${domain}${video.embed}`;
   sitemap += `  <url>
     <loc>${videoUrl}</loc>
     <lastmod>${lastMod}</lastmod>
