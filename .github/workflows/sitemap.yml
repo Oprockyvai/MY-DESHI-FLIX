@@ -1,33 +1,36 @@
 name: Generate Sitemap
 
 on:
-  schedule:
-    - cron: "0 0 * * 0" # প্রতি রবিবার 12:00 AM UTC তে রান করবে
-  workflow_dispatch: # ম্যানুয়ালি রান করার অপশন
+  push:
+    branches:
+      - main      # main branch-এ push হলে run হবে
+  workflow_dispatch: # manual trigger option
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.PERSONAL_GITHUB_TOKEN }} # Personal access token ব্যবহার
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
+    - name: Skip dependencies
+      run: echo "No dependencies to install"
 
-      - name: Generate sitemap
-        run: node generate-sitemap.js
+    - name: Run sitemap generator
+      run: node generate-sitemap.js
 
-      - name: Commit and push sitemap
-  run: |
-    git config --global user.name "github-actions"
-    git config --global user.email "github-actions@github.com"
-    git add sitemap.xml
-    git commit -m "Auto-update sitemap.xml" || echo "No changes to commit"
-    git push https://${{ secrets.PAT_TOKEN }}@github.com/<Oprockyvai>/<MY-DESHI-FLIX>.git HEAD:main
+    - name: Commit and push sitemap
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add sitemap.xml
+        git commit -m "Auto-update sitemap.xml" || echo "No changes to commit"
+        git push
