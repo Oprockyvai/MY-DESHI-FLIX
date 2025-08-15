@@ -1,15 +1,20 @@
 const fs = require('fs');
-const { videoList } = require('./search-data.js'); // আগের ভিডিও data import
+const { videoList } = require('./search-data.js');
 
 const domain = "https://mydeshiflix.pro";
 const lastMod = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
 // Sitemap start
-let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-// Categories (optional)
-const categories = ["milf","new","office","petite","russian","shemale","squirting","stepmom","stepdad","stepsis","stepbrother","teen","workout","xxx"];
+// Categories
+const categories = [
+  "milf","new","office","petite","russian",
+  "shemale","squirting","stepmom","stepdad",
+  "stepsis","stepbrother","teen","workout","xxx"
+];
+
 categories.forEach(cat => {
   sitemap += `  <url>
     <loc>${domain}/category.html?cat=${cat}</loc>
@@ -18,18 +23,21 @@ categories.forEach(cat => {
   </url>\n`;
 });
 
-// Add all videos from search-data.js
+// Videos
 videoList.forEach(video => {
+  let videoUrl = video.link.startsWith('http') 
+    ? video.link 
+    : `${domain}${video.link}`;
   sitemap += `  <url>
-    <loc>${video.link}</loc>
+    <loc>${videoUrl}</loc>
     <lastmod>${lastMod}</lastmod>
     <changefreq>monthly</changefreq>
   </url>\n`;
 });
 
-// Close sitemap
+// Close
 sitemap += `</urlset>`;
 
-// Write to file
+// Save file
 fs.writeFileSync('sitemap.xml', sitemap);
-console.log("sitemap.xml successfully generated with all videos!");
+console.log("✅ sitemap.xml generated successfully!");
