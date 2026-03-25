@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="metaTitle">Category — MyDesiFlix</title>
+  <meta name="description" id="metaDesc" content="Browse adult videos by category on MyDesiFlix." />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" id="ogTitle" content="Category — MyDesiFlix" />
+  <meta property="og:image" content="https://mydeshiflix.pro/logo.png" />
+  <meta property="og:site_name" content="MyDesiFlix" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link id="canonical" rel="canonical" href="https://mydeshiflix.pro/category" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<div id="age-gate" style="display:none">
+  <div class="age-gate-box">
+    <div class="logo-txt">MyDesiFlix</div>
+    <h2>Adults Only (18+)</h2>
+    <p>This website contains adult content for viewers 18+ only.</p>
+    <div class="age-btns">
+      <button class="btn-enter" id="btn-enter">I am 18+ — Enter</button>
+      <button class="btn-leave" id="btn-leave">Exit</button>
+    </div>
+    <p class="age-warning">By entering you agree to our Terms of Use.</p>
+  </div>
+</div>
+
+<header id="navbar"></header>
+<div id="search-bar"></div>
+<div id="mob-overlay" onclick="toggleDrawer()"></div>
+<nav id="mob-drawer"></nav>
+
+<main class="page">
+  <!-- ★ Top Ad ★ -->
+  <div id="ad-top"></div>
+
+  <div class="section-hd">
+    <h2 id="catHeading">Category</h2>
+    <select class="sort-select" id="sortSelect">
+      <option value="random">Shuffle</option>
+      <option value="asc">A → Z</option>
+      <option value="desc">Z → A</option>
+    </select>
+  </div>
+  <p class="result-count" id="resultCount"></p>
+  <div class="video-grid" id="catGrid"></div>
+
+  <!-- ★ Mid Ad ★ -->
+  <div id="ad-mid"></div>
+
+  <div class="pagination" id="pagination"></div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="search-data.js"></script>
+<script src="components.js"></script>
+<script>
+mountAgeGate();
+
+const params = new URLSearchParams(window.location.search);
+const cat    = params.get('cat') || '';
+const page   = parseInt(params.get('page')) || 1;
+const PER    = 12;
+let sortMode = 'random';
+
+renderNavbar(cat || null);
+renderFooter();
+document.getElementById('ad-top').innerHTML = adSlot('leaderboard');
+document.getElementById('ad-mid').innerHTML = adSlot('banner');
+
+const label = cat ? catLabel(cat) : 'All Videos';
+document.getElementById('metaTitle').textContent    = label + ' Videos — MyDesiFlix';
+document.getElementById('metaDesc').content         = `Watch free HD ${label} videos on MyDesiFlix.`;
+document.getElementById('ogTitle').content          = label + ' Videos — MyDesiFlix';
+document.getElementById('canonical').href           = `https://mydeshiflix.pro//category?cat=${encodeURIComponent(cat)}`;
+document.getElementById('catHeading').textContent   = label + ' Videos';
+
+function getVideos() {
+  let list = cat ? videoList.filter(v => v.category.includes(cat)) : videoList;
+  if (sortMode === 'random') list = [...list].sort(() => Math.random() - 0.5);
+  if (sortMode === 'asc')    list = [...list].sort((a,b) => a.title.localeCompare(b.title));
+  if (sortMode === 'desc')   list = [...list].sort((a,b) => b.title.localeCompare(a.title));
+  return list;
+}
+
+function render() {
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = skeletons(PER);
+  setTimeout(() => {
+    const all   = getVideos();
+    const total = Math.ceil(all.length / PER);
+    const slice = all.slice((page - 1) * PER, page * PER);
+    document.getElementById('resultCount').textContent = `${all.length} video${all.length !== 1 ? 's' : ''}`;
+    grid.innerHTML = slice.length
+      ? slice.map(v => videoCard(v)).join('')
+      : '<div class="no-results" style="grid-column:1/-1"><h3>No videos found</h3></div>';
+    buildPagination(document.getElementById('pagination'), page, total,
+      p => `/category?cat=${encodeURIComponent(cat)}&page=${p}`);
+  }, 150);
+}
+
+document.getElementById('sortSelect').addEventListener('change', function() { sortMode = this.value; render(); });
+render();
+</script>
+</body>
+</html>

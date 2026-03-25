@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Categories — MyDesiFlix</title>
+  <meta name="description" content="Browse all adult video categories on MyDesiFlix — Desi, Indian, MILF, Teen, Hardcore, Lesbian, BBC, Asian, Latina and 150+ more categories." />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="All Categories — MyDesiFlix" />
+  <meta property="og:image" content="https://mydeshiflix.pro/logo.png" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="canonical" href="https://mydeshiflix.pro/categories" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .cat-section { margin-bottom: 36px; }
+    .cat-section-title {
+      font-size: .75rem; font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 2px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px; margin-bottom: 14px;
+    }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+    }
+    .cat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .cat-card:hover {
+      background: var(--bg3);
+      border-color: var(--red);
+      transform: translateY(-2px);
+    }
+    .cat-card .cat-name {
+      font-size: .9rem; font-weight: 600; color: var(--text);
+    }
+    .cat-card .cat-count {
+      font-size: .75rem; color: var(--text-muted);
+    }
+    .cat-search-wrap {
+      padding: 20px 0 12px;
+      max-width: 500px;
+    }
+    .cat-search-wrap input {
+      width: 100%; padding: 10px 16px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text);
+      font-family: inherit; font-size: .95rem; outline: none;
+    }
+    .cat-search-wrap input:focus { border-color: var(--red); }
+    #noMatch { display: none; color: var(--text-muted); padding: 24px 0; }
+  </style>
+</head>
+<body>
+
+<div id="age-gate" style="display:none">
+  <div class="age-gate-box">
+    <div class="logo-txt">MyDesiFlix</div>
+    <h2>Adults Only (18+)</h2>
+    <p>This website contains adult content for viewers 18+ only.</p>
+    <div class="age-btns">
+      <button class="btn-enter" id="btn-enter">I am 18+ — Enter</button>
+      <button class="btn-leave" id="btn-leave">Exit</button>
+    </div>
+    <p class="age-warning">By entering you agree to our Terms of Use.</p>
+  </div>
+</div>
+
+<header id="navbar"></header>
+<div id="search-bar"></div>
+<div id="mob-overlay" onclick="toggleDrawer()"></div>
+<nav id="mob-drawer"></nav>
+
+<main class="page">
+  <div id="ad-top"></div>
+
+  <div class="section-hd" style="padding-top:24px">
+    <h2>All Categories</h2>
+    <span style="color:var(--text-muted);font-size:.85rem" id="totalCount"></span>
+  </div>
+
+  <div class="cat-search-wrap">
+    <input type="text" id="catFilter" placeholder="🔍 Filter categories…" oninput="filterCats()" />
+  </div>
+
+  <p id="noMatch">No categories matched your search.</p>
+  <div id="catSections"></div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="search-data.js"></script>
+<script src="components.js"></script>
+<script>
+mountAgeGate();
+renderNavbar();
+renderFooter();
+document.getElementById('ad-top').innerHTML = adSlot('leaderboard');
+
+// Group definitions
+const GROUPS = [
+  { title: '🔥 Popular / Trending', keys: ['new','trending','hd','amateur','homemade','xxx','hardcore','pov'] },
+  { title: '🌏 Desi / South Asian',  keys: ['indian','desi','bangladeshi','pakistani','nepali','srilankan','desi-bhabhi','desi-college','desi-village','desi-couple','desi-wife','desi-aunty','hindustani','bollywood'] },
+  { title: '🏯 Asian',               keys: ['asian','japanese','chinese','korean','thai','filipina','vietnamese','indonesian','malaysian','javanese'] },
+  { title: '🌍 Western & Ethnicity', keys: ['american','european','russian','british','french','german','italian','czech','ukrainian','hungarian','latina','mexican','brazilian','colombian','spanish','puerto-rican','ebony','black','african','arab','middle-eastern','turkish','iranian','interracial'] },
+  { title: '👩‍💼 Age / Type',          keys: ['teen','college','milf','mature','granny','cougar','mom','older-younger'] },
+  { title: '💪 Body Type',            keys: ['petite','big-ass','big-tits','natural-tits','small-tits','busty','curvy','bbw','skinny','fit','tall','blonde','brunette','redhead'] },
+  { title: '🎬 Acts',                 keys: ['blowjob','deepthroat','cumshot','creampie','facial','anal','dp','squirting','orgasm','fingering','fisting','rimjob','titjob','handjob','footjob','threesome','foursome','orgy','gangbang','bbc','big-cock','small-cock','dildo','toys','vibrator','strap-on','massage','oiled','wet','shower','bath','outdoor','public','car','pool','beach'] },
+  { title: '🎭 Genres / Scenes',      keys: ['lesbian','gay','bisexual','shemale','solo','masturbation','couple','swinger','cuckold','cheating','wife','girlfriend','casting','audition','interview','reality'] },
+  { title: '👨‍👩‍👧 Step / Family Fantasy', keys: ['stepmom','stepdad','stepsis','stepbrother','family','taboo'] },
+  { title: '📍 Location / Setting',   keys: ['office','kitchen','bedroom','classroom','hospital','hotel','gym','workout','sports'] },
+  { title: '🎭 Roleplay',             keys: ['nurse','teacher','doctor','maid','boss','secretary','cheerleader','model','stripper','pornstar'] },
+  { title: '⛓️ Fetish / Kink',        keys: ['bdsm','bondage','domination','submission','femdom','spanking','feet','pantyhose','stockings','lingerie','latex','leather','uniform','cosplay','tattoo','piercing','glasses'] },
+  { title: '⭐ Special',              keys: ['compilation','uncensored','exclusive','verified'] },
+];
+
+function countForKey(key) {
+  return videoList.filter(v => v.category.includes(key)).length;
+}
+
+function buildSections(filterText) {
+  const q = filterText.toLowerCase().trim();
+  let totalShown = 0;
+  let anyMatch = false;
+  let html = '';
+
+  for (const grp of GROUPS) {
+    const items = grp.keys.map(key => {
+      const cat = CATS.find(c => c.key === key);
+      if (!cat) return null;
+      if (q && !cat.label.toLowerCase().includes(q) && !cat.key.includes(q)) return null;
+      return cat;
+    }).filter(Boolean);
+
+    if (!items.length) continue;
+    anyMatch = true;
+    totalShown += items.length;
+
+    html += `<div class="cat-section" data-group>
+      <div class="cat-section-title">${grp.title}</div>
+      <div class="cat-grid">
+        ${items.map(cat => {
+          const cnt = countForKey(cat.key);
+          return `<div class="cat-card" onclick="location.href='category.html?cat=${cat.key}'">
+            <span class="cat-name">${cat.label}</span>
+            <span class="cat-count">${cnt > 0 ? cnt + ' video' + (cnt !== 1 ? 's' : '') : 'Coming soon'}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('catSections').innerHTML = html;
+  document.getElementById('totalCount').textContent = totalShown + ' categories';
+  document.getElementById('noMatch').style.display = anyMatch ? 'none' : 'block';
+}
+
+function filterCats() {
+  buildSections(document.getElementById('catFilter').value);
+}
+
+buildSections('');
+</script>
+</body>
+</html>

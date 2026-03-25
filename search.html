@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="metaTitle">Search — MyDesiFlix</title>
+  <meta name="description" content="Search results for adult videos on MyDesiFlix." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<div id="age-gate" style="display:none">
+  <div class="age-gate-box">
+    <div class="logo-txt">MyDesiFlix</div>
+    <h2>Adults Only (18+)</h2>
+    <p>This website contains adult content for viewers 18+ only.</p>
+    <div class="age-btns">
+      <button class="btn-enter" id="btn-enter">I am 18+ — Enter</button>
+      <button class="btn-leave" id="btn-leave">Exit</button>
+    </div>
+    <p class="age-warning">By entering you agree to our Terms of Use.</p>
+  </div>
+</div>
+
+<header id="navbar"></header>
+<div id="search-bar"></div>
+<div id="mob-overlay" onclick="toggleDrawer()"></div>
+<nav id="mob-drawer"></nav>
+
+<main class="page">
+  <!-- ★ Top Ad ★ -->
+  <div id="ad-top"></div>
+
+  <div class="search-heading" id="searchHeading">Search Results</div>
+  <p class="result-count" id="resultCount"></p>
+  <div class="video-grid" id="resultsGrid"></div>
+
+  <!-- ★ Mid Ad ★ -->
+  <div id="ad-mid"></div>
+
+  <div class="pagination" id="pagination"></div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="search-data.js"></script>
+<script src="components.js"></script>
+<script>
+mountAgeGate();
+renderNavbar();
+renderFooter();
+document.getElementById('ad-top').innerHTML = adSlot('leaderboard');
+document.getElementById('ad-mid').innerHTML = adSlot('banner');
+
+const params = new URLSearchParams(window.location.search);
+const query  = (params.get('q') || '').toLowerCase().trim();
+const page   = parseInt(params.get('page')) || 1;
+const PER    = 12;
+
+document.getElementById('metaTitle').textContent = (query ? `"${query}" Search — ` : '') + 'MyDesiFlix';
+
+const matched = query
+  ? videoList.filter(v =>
+      v.title.toLowerCase().includes(query) ||
+      v.category.some(c => c.includes(query)))
+  : [];
+
+const totalPages = Math.ceil(matched.length / PER);
+const slice = matched.slice((page - 1) * PER, page * PER);
+const heading = document.getElementById('searchHeading');
+const grid    = document.getElementById('resultsGrid');
+const count   = document.getElementById('resultCount');
+
+if (!query) {
+  heading.innerHTML = 'Search <span>Videos</span>';
+  count.textContent = 'Enter a keyword above to search.';
+} else if (!matched.length) {
+  heading.innerHTML = `No results for <span>"${escHtml(query)}"</span>`;
+  count.textContent = 'Try different keywords.';
+  grid.innerHTML = `<div class="no-results" style="grid-column:1/-1">
+    <h3>Nothing found</h3><p>Try shorter or different keywords.</p></div>`;
+} else {
+  heading.innerHTML = `Results for <span>"${escHtml(query)}"</span>`;
+  count.textContent = `${matched.length} video${matched.length !== 1 ? 's' : ''} found`;
+  grid.innerHTML = slice.map(v => videoCard(v)).join('');
+  buildPagination(document.getElementById('pagination'), page, totalPages,
+    p => `/search?q=${encodeURIComponent(query)}&page=${p}`);
+}
+</script>
+</body>
+</html>

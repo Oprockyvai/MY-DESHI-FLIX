@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="metaTitle">Watch Video — MyDesiFlix</title>
+  <meta name="description" id="metaDesc" content="Watch free HD adult videos on MyDesiFlix. No ads, no redirects." />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" id="ogTitle" content="MyDesiFlix" />
+  <meta property="og:description" id="ogDesc" content="Watch free HD adult videos on MyDesiFlix." />
+  <meta property="og:image" id="ogImg" content="https://mydeshiflix.pro/logo.png" />
+  <meta property="og:url" id="ogUrl" content="https://mydeshiflix.pro/video" />
+  <meta property="og:type" content="video.other" />
+  <meta property="og:site_name" content="MyDesiFlix" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" id="twTitle" content="MyDesiFlix" />
+  <meta name="twitter:image" id="twImg" content="https://mydeshiflix.pro/logo.png" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link id="canonical" rel="canonical" href="https://mydeshiflix.pro/video" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<div id="age-gate" style="display:none">
+  <div class="age-gate-box">
+    <div class="logo-txt">MyDesiFlix</div>
+    <h2>Adults Only (18+)</h2>
+    <p>This website contains adult content for viewers 18+ only.</p>
+    <div class="age-btns">
+      <button class="btn-enter" id="btn-enter">I am 18+ — Enter</button>
+      <button class="btn-leave" id="btn-leave">Exit</button>
+    </div>
+    <p class="age-warning">By entering you agree to our Terms of Use.</p>
+  </div>
+</div>
+
+<header id="navbar"></header>
+<div id="search-bar"></div>
+<div id="mob-overlay" onclick="toggleDrawer()"></div>
+<nav id="mob-drawer"></nav>
+
+<div class="video-page">
+
+  <!-- ★ Top Ad (above player) ★ -->
+  <div id="ad-top"></div>
+
+  <div id="playerWrap" class="video-player-wrap" style="display:none">
+    <div class="ratio">
+      <iframe id="videoPlayer" src="" loading="lazy"
+        allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- ★ Ad below player ★ -->
+  <div id="ad-below-player"></div>
+
+  <div class="video-meta" id="videoMeta">
+    <div class="skeleton skel-line" style="height:24px;margin:0 0 12px;border-radius:6px;max-width:600px"></div>
+    <div class="skeleton skel-line short" style="height:14px;margin:0;border-radius:6px;max-width:300px"></div>
+  </div>
+
+  <div class="section-hd"><h2>Related Videos</h2></div>
+  <div class="video-grid" id="relatedGrid"></div>
+
+  <!-- ★ Footer strip ad ★ -->
+  <div id="ad-footer-strip"></div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="search-data.js"></script>
+<script src="components.js"></script>
+<script>
+mountAgeGate();
+renderNavbar();
+renderFooter();
+
+// Ads
+document.getElementById('ad-top').innerHTML = adSlot('leaderboard');
+document.getElementById('ad-below-player').innerHTML = adSlot('banner');
+document.getElementById('ad-footer-strip').innerHTML = adSlot('footer');
+
+const id = new URLSearchParams(window.location.search).get('id');
+const video = videoList.find(v => v.id.toString() === id);
+
+if (!video) {
+  document.getElementById('videoMeta').innerHTML = '<h1 style="color:var(--text-muted);padding:20px 0">Video not found.</h1>';
+} else {
+  const url = 'https://mydeshiflix.pro/video?id=' + video.id;
+  document.getElementById('metaTitle').textContent  = video.title + ' — MyDesiFlix';
+  document.getElementById('metaDesc').content       = video.title + ' | Watch free HD video on MyDesiFlix. No ads, no redirects.';
+  document.getElementById('ogTitle').content        = video.title + ' — MyDesiFlix';
+  document.getElementById('ogDesc').content         = video.title + ' | Watch free on MyDesiFlix.';
+  document.getElementById('ogImg').content          = video.thumbnail;
+  document.getElementById('ogUrl').content          = url;
+  document.getElementById('twTitle').content        = video.title;
+  document.getElementById('twImg').content          = video.thumbnail;
+  document.getElementById('canonical').href         = url;
+
+  const schema = document.createElement('script');
+  schema.type = 'application/ld+json';
+  schema.text = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": video.title,
+    "description": video.title + ' — Watch on MyDesiFlix.',
+    "thumbnailUrl": video.thumbnail,
+    "uploadDate": video.uploadDate || "2025-01-01",
+    "embedUrl": video.embed,
+    "contentUrl": url
+  });
+  document.head.appendChild(schema);
+
+  document.getElementById('videoPlayer').src = video.embed;
+  document.getElementById('playerWrap').style.display = 'block';
+
+  const tags = (video.category || []).map(c =>
+    `<a class="video-tag" href="category.html?cat=${c}">${catLabel(c)}</a>`).join('');
+  document.getElementById('videoMeta').innerHTML =
+    `<h1>${escHtml(video.title)}</h1><div class="video-tags" style="margin-top:12px">${tags}</div>`;
+
+  const sameCat = videoList.filter(v =>
+    v.id.toString() !== id && v.category.some(c => video.category.includes(c))
+  ).sort(() => Math.random() - 0.5).slice(0, 6);
+  const others = videoList.filter(v =>
+    v.id.toString() !== id && !video.category.some(c => v.category.includes(c))
+  ).sort(() => Math.random() - 0.5).slice(0, 6);
+  document.getElementById('relatedGrid').innerHTML =
+    [...sameCat, ...others].slice(0, 12).map(v => videoCard(v)).join('');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyDesiFlix — Free HD Desi &amp; Adult Videos Streaming</title>
+  <meta name="description" content="Watch free HD Desi, MILF, Hardcore, Amateur, Lesbian, Latina, Petite, Asian, Teen and more adult videos on MyDesiFlix. No ads, no redirects. Stream online instantly." />
+  <meta name="keywords" content="free desi porn, HD adult videos, desi sex videos, indian xxx, milf videos, hardcore, teen porn, amateur, lesbian, latina" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="MyDesiFlix Team" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="MyDesiFlix — Free HD Desi &amp; Adult Videos" />
+  <meta property="og:description" content="Stream free HD adult videos on MyDesiFlix. No ads, no redirects." />
+  <meta property="og:image" content="https://mydeshiflix.pro/logo.png" />
+  <meta property="og:url" content="https://mydeshiflix.pro/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="MyDesiFlix" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MyDesiFlix — Free HD Desi &amp; Adult Videos" />
+  <meta name="twitter:description" content="Stream free HD adult videos on MyDesiFlix. No ads, no redirects." />
+  <meta name="twitter:image" content="https://mydeshiflix.pro/logo.png" />
+
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/logo.png" />
+  <link rel="canonical" href="https://mydeshiflix.pro/" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- AdSense — uncomment and replace with your publisher ID -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MyDesiFlix",
+    "url": "https://mydeshiflix.pro/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://mydeshiflix.pro/search.html?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<!-- Age Gate -->
+<div id="age-gate" style="display:none">
+  <div class="age-gate-box">
+    <div class="logo-txt">MyDesiFlix</div>
+    <h2>Adults Only (18+)</h2>
+    <p>This website contains adult content intended for viewers 18 years of age or older. By entering you confirm you are of legal age in your jurisdiction.</p>
+    <div class="age-btns">
+      <button class="btn-enter" id="btn-enter">I am 18+ — Enter</button>
+      <button class="btn-leave" id="btn-leave">Exit</button>
+    </div>
+    <p class="age-warning">By entering you agree to our Terms of Use and confirm you are legally permitted to view adult content.</p>
+  </div>
+</div>
+
+<!-- Navbar -->
+<header id="navbar"></header>
+
+<!-- ★ Sticky Search Bar ★ -->
+<div id="search-bar"></div>
+
+<!-- Mobile Drawer -->
+<div id="mob-overlay" onclick="toggleDrawer()"></div>
+<nav id="mob-drawer"></nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="page">
+    <h1>My<span>Deshi</span>Flix</h1>
+    <p>Free HD adult videos &nbsp;·&nbsp; No ads &nbsp;·&nbsp; No redirects</p>
+  </div>
+</div>
+
+<!-- ★ Top Leaderboard Ad ★ -->
+<div class="page">
+  <div id="ad-top"></div>
+</div>
+
+<main class="page">
+  <div class="section-hd"><h2>Browse Categories</h2></div>
+  <div class="cat-chips" id="catChips"></div>
+
+  <div class="section-hd">
+    <h2 id="gridTitle">Latest Videos</h2>
+    <select class="sort-select" id="sortSelect">
+      <option value="random">Shuffle</option>
+      <option value="asc">A → Z</option>
+      <option value="desc">Z → A</option>
+    </select>
+  </div>
+
+  <div class="video-grid" id="videoGrid"></div>
+
+  <!-- ★ Mid-Content Ad ★ -->
+  <div id="ad-mid"></div>
+
+  <div class="pagination" id="pagination"></div>
+</main>
+
+<!-- ★ Footer Ad Strip ★ -->
+<div class="page">
+  <div id="ad-footer-strip"></div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="search-data.js"></script>
+<script src="components.js"></script>
+<script>
+const PER_PAGE = 12;
+const params = new URLSearchParams(window.location.search);
+let currentPage = parseInt(params.get('page')) || 1;
+let activeCat = params.get('cat') || 'all';
+let sortMode = 'random';
+
+const SESSION_KEY = 'mdf_order';
+let orderedIds = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null');
+if (!orderedIds) {
+  orderedIds = [...videoList].sort(() => Math.random() - 0.5).map(v => v.id);
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(orderedIds));
+}
+
+function getFiltered() {
+  let list = orderedIds.map(id => videoList.find(v => v.id === id)).filter(Boolean);
+  if (activeCat !== 'all') list = list.filter(v => v.category.includes(activeCat));
+  if (sortMode === 'asc')  list = [...list].sort((a,b) => a.title.localeCompare(b.title));
+  if (sortMode === 'desc') list = [...list].sort((a,b) => b.title.localeCompare(a.title));
+  return list;
+}
+
+function renderChips() {
+  const grid = document.getElementById('catChips');
+  const allEntry = `<div class="cat-chip ${activeCat==='all'?'active':''}" onclick="selectCat('all')">🎬 All (${videoList.length})</div>`;
+  const catEntries = CATS.map(c => {
+    const count = videoList.filter(v => v.category.includes(c.key)).length;
+    if (!count) return '';
+    return `<div class="cat-chip ${activeCat===c.key?'active':''}" onclick="selectCat('${c.key}')">${c.label} <span style="opacity:.6;font-size:.75em">(${count})</span></div>`;
+  }).join('');
+  grid.innerHTML = allEntry + catEntries;
+}
+
+function selectCat(key) {
+  activeCat = key;
+  currentPage = 1;
+  document.getElementById('gridTitle').textContent = key === 'all' ? 'Latest Videos' : catLabel(key) + ' Videos';
+  renderChips();
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('videoGrid');
+  grid.innerHTML = skeletons(PER_PAGE);
+  setTimeout(() => {
+    const filtered = getFiltered();
+    const totalPages = Math.ceil(filtered.length / PER_PAGE);
+    if (currentPage > totalPages) currentPage = 1;
+    const slice = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+    grid.innerHTML = slice.length
+      ? slice.map((v, i) => videoCard(v, i < 3 && activeCat === 'all' ? 'HD' : null)).join('')
+      : '<div class="no-results" style="grid-column:1/-1"><h3>No videos found</h3><p>Try a different category.</p></div>';
+    buildPagination(document.getElementById('pagination'), currentPage, totalPages, p => {
+      const u = new URLSearchParams();
+      u.set('page', p);
+      if (activeCat !== 'all') u.set('cat', activeCat);
+      return '?' + u;
+    });
+  }, 150);
+}
+
+document.getElementById('sortSelect').addEventListener('change', function() { sortMode = this.value; currentPage = 1; renderGrid(); });
+
+// Init
+mountAgeGate();
+renderNavbar(activeCat !== 'all' ? activeCat : null);
+renderFooter();
+renderChips();
+if (activeCat !== 'all') document.getElementById('gridTitle').textContent = catLabel(activeCat) + ' Videos';
+renderGrid();
+
+// Ads
+document.getElementById('ad-top').innerHTML = adSlot('leaderboard');
+document.getElementById('ad-mid').innerHTML = adSlot('banner');
+document.getElementById('ad-footer-strip').innerHTML = adSlot('footer');
+</script>
+</body>
+</html>

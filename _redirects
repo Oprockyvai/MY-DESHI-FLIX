@@ -1,2 +1,12 @@
-/video         /video.html      200
-/video/*       /video.html      200
+# Netlify pretty_urls=true handles /page → /page.html automatically.
+# These just catch any direct .html access and redirect to clean URL.
+/index.html      /               301!
+/video.html      /video          301!
+/search.html     /search         301!
+/category.html   /category       301!
+/categories.html /categories     301!
+
+# Fallback for query params with .html
+/video.html*     /video:splat    301!
+/search.html*    /search:splat   301!
+/category.html*  /category:splat 301!
