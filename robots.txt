@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /video-player
-Sitemap: https://mydeshiflix.pro/sitemap.xml
